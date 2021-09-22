@@ -28,30 +28,22 @@
 
 ## Задание №1 - Подготовка рабочей среды
 
-Вы пришли на новое место работы или приобрели новый компьютер.
-Первым делом надо настроить окружение для дальнейшей работы. 
+1. Установить PyCharm Community Edition: https://www.jetbrains.com/ru-ru/pycharm/download/ +
+2. Установить плагины:
+    - Terraform, +
+    - MarkDown, +
+    - Yaml/Ansible Support, +
+    - Jsonnet. +
+3. Склонировать текущий репозиторий или просто создать файлы для проверки плагинов+
 
-1. Установить PyCharm Community Edition: https://www.jetbrains.com/ru-ru/pycharm/download/ - это бесплатная версия IDE. 
-Если у вас уже установлен любой другой продукт от JetBrains,то можно использовать его. 
-1. Установить плагины:
-    - Terraform,
-    - MarkDown,
-    - Yaml/Ansible Support,
-    - Jsonnet.
-1. Склонировать текущий репозиторий или просто создать файлы для проверки плагинов:
-    - [netology.tf](netology.tf) – terraform,
-    - [netology.sh](netology.sh) – bash,
-    - [netology.md](netology.md) – markdown, 
-    - [netology.yaml](netology.yaml) – yaml,
-    - [netology.jsonnet](netology.jsonnet) – jsonnet.
-1. Убедитесь, что работает подсветка синтаксиса, файлы должны выглядеть вот так:
-    - Terraform: ![Терраформ](img/terraform.png)
-    - Bash: ![bahs](img/bash.png)
-    - Markdown: ![markdown](img/markdown.png)
-    - Yaml: ![Yaml](img/yaml.png)
-    - Jsonnet: ![Jsonnet](img/jsonnet.png)
-1. Добавьте свое имя в каждый файл, сделайте снимок экрана и загрузите его на любой сервис обмена картинками.
-1. Ссылки на картинки укажите в личном кабинете как решение домашнего задания. 
+4. Убедитесь, что работает подсветка синтаксиса +
+5. Добавьте свое имя в каждый файл, сделайте снимок экрана и загрузите его на любой сервис обмена картинками.   
+    - Terraform: ![Терраформ](https://user-images.githubusercontent.com/91043924/134353930-ea7dd7c4-8de7-4307-8092-1baa1413d6fc.png)
+    - Bash: ![bahs](https://user-images.githubusercontent.com/91043924/134354450-37886755-e1b9-4850-85ec-fa7981514092.png)
+    - Markdown: ![markdown](https://user-images.githubusercontent.com/91043924/134354648-ba63cb2c-e816-4439-a3c8-ad2c25c6ae30.png)
+    - Yaml: ![Yaml](https://user-images.githubusercontent.com/91043924/134354768-bec209ac-06a2-4188-b50c-fb700e087ec3.png)
+    - Jsonnet: ![Jsonnet](https://user-images.githubusercontent.com/91043924/134354860-bea3d3ad-93f8-41ba-9711-bb28ca0462ff.png)
+6. Ссылки на картинки укажите в личном кабинете как решение домашнего задания. +
 
 ## Задание №2 - Описание жизненного цикла задачи (разработки нового функционала)
 
