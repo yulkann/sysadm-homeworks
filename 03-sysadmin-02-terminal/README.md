@@ -2,10 +2,10 @@
 
 1. Какого типа команда `cd`? Попробуйте объяснить, почему она именно такого типа; опишите ход своих мыслей, если считаете что она могла бы быть другого типа.
 		
-		```
+		
 		vagrant@vagrant:~$ type -a cd
 		cd is a shell builtin
-		```
+		
 		` cd- это встроенная в оболочку команда`
 
 1. Какая альтернатива без pipe команде `grep <some_string> <some_file> | wc -l`? `man grep` поможет в ответе на этот вопрос. Ознакомьтесь с [документом](http://www.smallo.ruhr.de/award.html) о других подобных некорректных вариантах использования pipe.
@@ -14,21 +14,21 @@
 		
 1. Какой процесс с PID `1` является родителем для всех процессов в вашей виртуальной машине Ubuntu 20.04?
 
-		```
+		
 		1 root      20   0  101796  11104   8224 S   0.0   1.1   0:01.75 systemd
-		```
+		
  
 1. Как будет выглядеть команда, которая перенаправит вывод stderr `ls` на другую сессию терминала?
 		
-		```
+		
 		vagrant@vagrant:~$ ls  /root/ 2> /dev/pts/1
 		
 		vagrant@vagrant:~$ ls: cannot open directory '/root/': Permission denied
-		```
+		
 
 1. Получится ли одновременно передать команде файл на stdin и вывести ее stdout в другой файл? Приведите работающий пример.
 		
-		```
+		
 		vagrant@vagrant:~$ cat /var/log/dmesg | grep Linux | tee loggrep
 		[    0.000000] kernel: Linux version 5.4.0-80-generic (buildd@lcy01-amd64-030) (gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)) #90-Ubuntu SMP Fri Jul 9 22:49:44 UTC 2021 (Ubuntu 5.4.0-80.90-generic 5.4.124)
 		[    0.291942] kernel: ACPI: Added _OSI(Linux-Dell-Video)
@@ -45,20 +45,29 @@
 		[    0.378017] kernel: pps_core: LinuxPPS API ver. 1 registered
 		[    1.017298] kernel: Linux agpgart interface v0.103
 		[    6.738037] kernel: 23:49:42.175156 main     OS Product: Linux
-		```
+		
 
 
 1. Получится ли вывести находясь в графическом режиме данные из PTY в какой-либо из эмуляторов TTY? Сможете ли вы наблюдать выводимые данные?
 
-		![изображение](https://user-images.githubusercontent.com/91043924/139559769-86b15db0-36eb-469a-8d50-4b16d279362e.png)
+	![изображение](https://user-images.githubusercontent.com/91043924/139574235-ddab0b3e-aaf7-4195-8858-79c8aff5eb10.png)
+
 
 
 1. Выполните команду `bash 5>&1`. К чему она приведет? Что будет, если вы выполните `echo netology > /proc/$$/fd/5`? Почему так происходит?
 
+		создает новый файловый дискриптр 5 и перенаправляет его в  stdout
+		vagrant@vagrant:~$ echo netology > /proc/$$/fd/5
+		netology
+		выводит в консоли дескриптор 5, который  мы перенаправили в stdout
 
 1. Получится ли в качестве входного потока для pipe использовать только stderr команды, не потеряв при этом отображение stdout на pty? Напоминаем: по умолчанию через pipe передается только stdout команды слева от `|` на stdin команды справа.
 Это можно сделать, поменяв стандартные потоки местами через промежуточный новый дескриптор, который вы научились создавать в предыдущем вопросе.
 
+		vagrant@vagrant:~$ ls /root /home /root 4>&2 2>&1 1>&4 | grep Permission -c
+		/home:
+		vagrant
+		2
 
 1. Что выведет команда `cat /proc/$$/environ`? Как еще можно получить аналогичный по содержанию вывод?
 
@@ -98,13 +107,20 @@
 
 1. Используя `man`, опишите что доступно по адресам `/proc/<PID>/cmdline`, `/proc/<PID>/exe`.
 
-
+		       /proc/[pid]/cmdline
+		      This read-only file holds the complete command line for the process, unless the process is a zombie.  In the latter case, there is nothing in this file: that is, a read on  this  file  will return 0 characters.  The command-line arguments appear in this file as a set of strings separated by null bytes ('\0'), with a further null byte after the last string.
+			Manual page proc(5) line 178
+			
+			/proc/[pid]/exe
+              		Under  Linux 2.2 and later, this file is a symbolic link containing the actual pathname of the executed command.
+			Manual page proc(5) line 219
+			
 1. Узнайте, какую наиболее старшую версию набора инструкций SSE поддерживает ваш процессор с помощью `/proc/cpuinfo`.
 			
-			```
+			
 			cat /proc/cpuinfo | grep sse
 			sse4a 
-			```
+			
 
 1. При открытии нового окна терминала и `vagrant ssh` создается новая сессия и выделяется pty. Это можно подтвердить командой `tty`, которая упоминалась в лекции 3.2. Однако:
 
@@ -119,8 +135,9 @@
 	
 1. Бывает, что есть необходимость переместить запущенный процесс из одной сессии в другую. Попробуйте сделать это, воспользовавшись `reptyr`. Например, так можно перенести в `screen` процесс, который вы запустили по ошибке в обычной SSH-сессии.
 
-
+		reptyr -T [PID]
+		
 1. `sudo echo string > /root/new_file` не даст выполнить перенаправление под обычным пользователем, так как перенаправлением занимается процесс shell'а, который запущен без `sudo` под вашим пользователем. Для решения данной проблемы можно использовать конструкцию `echo string | sudo tee /root/new_file`. Узнайте что делает команда `tee` и почему в отличие от `sudo echo` команда с `sudo tee` будет работать.
 	
 		`sudo не выполняет перенаправление вывода, это произойдет как непривилегированный пользователь.
-		Tree получит вывод команды echo, повысит права на sudo и запишет в файл.`
+		tee получит вывод команды echo, повысит права на sudo и запишет в файл.`
