@@ -46,9 +46,29 @@
             
 
 1. Ознакомьтесь с опциями node_exporter и выводом `/metrics` по-умолчанию. Приведите несколько опций, которые вы бы выбрали для базового мониторинга хоста по CPU, памяти, диску и сети.
+             
+                  --collector.cpu.info      Enables metric cpu_info
+                  --collector.perf.cpus=""  List of CPUs from which perf metrics should be
+                  --collector.cpu           Enable the cpu collector (default: enabled).
+                  --collector.cpufreq       Enable the cpufreq collector (default: enabled).
+                  --collector.meminfo       Enable the meminfo collector (default: enabled).
+                  --collector.meminfo_numa  Enable the meminfo_numa collector (default:
+                  --collector.diskstats.ignored-devices="^(ram|loop|fd|(h|s|v|xv)d[a-z]|nvme\\d+n\\d+p)\\d+$"
+                                            Regexp of devices to ignore for diskstats.
+                  --collector.diskstats     Enable the diskstats collector (default:
 
-
-
+               --collector.netclass.ignored-devices="^$"
+                                            Regexp of net devices to ignore for netclass
+                  --collector.netdev.device-blacklist=COLLECTOR.NETDEV.DEVICE-BLACKLIST
+                                            Regexp of net devices to blacklist (mutually
+                  --collector.netdev.device-whitelist=COLLECTOR.NETDEV.DEVICE-WHITELIST
+                                            Regexp of net devices to whitelist (mutually
+                 --collector.netstat.fields="^(.*_(InErrors|InErrs)|Ip_Forwarding|Ip(6|Ext)_(InOctets|OutOctets)|Icmp6?_(InMsgs|OutMsgs)|TcpExt_(Listen.*|Syncookies.*|TCPSynRetrans)|Tcp_(ActiveOpens|InSegs|OutSegs|PassiveOpens|RetransSegs|CurrEstab)|Udp6?_(InDatagrams|OutDatagrams|NoPorts|RcvbufErrors|SndbufErrors))$"
+                                            Regexp of fields to return for netstat
+                  --collector.netclass      Enable the netclass collector (default:
+                  --collector.netdev        Enable the netdev collector (default: enabled).
+                  --collector.netstat       Enable the netstat collector (default: enabled).
+      
 3. Установите в свою виртуальную машину [Netdata](https://github.com/netdata/netdata). Воспользуйтесь [готовыми пакетами](https://packagecloud.io/netdata/netdata/install) для установки (`sudo apt install -y netdata`). После успешной установки:
     * в конфигурационном файле `/etc/netdata/netdata.conf` в секции [web] замените значение с localhost на `bind to = 0.0.0.0`,
     * добавьте в Vagrantfile проброс порта Netdata на свой локальный компьютер и сделайте `vagrant reload`:
@@ -63,7 +83,7 @@
 
 1. Можно ли по выводу `dmesg` понять, осознает ли ОС, что загружена не на настоящем оборудовании, а на системе виртуализации?
 
-      Думаю да:
+                  Думаю да:
                     vagrant@vagrant:~$ cat /var/log/dmesg | grep virtual
                    [    0.002790] kernel: CPU MTRRs all blank - `virtualized system`.
                    [    0.115339] kernel: Booting paravirtualized kernel on KVM
@@ -88,3 +108,20 @@
                      root          11  0.0  0.3  11492  3328 pts/3    R+   22:16   0:00 ps aux
       
 3. Найдите информацию о том, что такое `:(){ :|:& };:`. Запустите эту команду в своей виртуальной машине Vagrant с Ubuntu 20.04 (**это важно, поведение в других ОС не проверялось**). Некоторое время все будет "плохо", после чего (минуты) – ОС должна стабилизироваться. Вызов `dmesg` расскажет, какой механизм помог автоматической стабилизации. Как настроен этот механизм по-умолчанию, и как изменить число процессов, которое можно создать в сессии?
+         
+                     fork-бомба — вредоносная или ошибочно написанная программа, бесконечно создающая свои копии (системным вызовом fork()), которые обычно также начинают создавать свои копии и т. д.
+
+            Выполнение такой программы может вызывать большую нагрузку вычислительной системы или даже отказ в обслуживании вследствие нехватки системных ресурсов (дескрипторов процессов, памяти, процессорного времени), что и является целью. 
+         
+                     vagrant@vagrant:~$ :(){ :|:& };:
+                     [1] 58964
+                     vagrant@vagrant:~$ -bash: fork: retry: Resource temporarily unavailable
+                     -bash: fork: retry: Resource temporarily unavailable
+                     -bash: fork: retry: Resource temporarily unavailable
+                     -bash: fork: retry: Resource temporarily unavailable
+
+         [ 1101.987163] cgroup: fork rejected by pids controller in /user.slice/user-1000.slice/session-3.scope
+         
+                  Один из способов предотвращения негативных последствий работы fork-бомбы — принудительное ограничение количества процессов, которые пользователь может запустить одновременно.
+                  ulimit -u 20
+                  
