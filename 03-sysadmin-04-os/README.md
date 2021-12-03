@@ -4,6 +4,47 @@
 
     * поместите его в автозагрузку,
     * предусмотрите возможность добавления опций к запускаемому процессу через внешний файл (посмотрите, например, на `systemctl cat cron`),
+    
+                   vagrant@vagrant:~$ sudo systemctl status node_exporter
+               ● node_exporter.service - Prometheus Node Exporter
+                    Loaded: loaded (/etc/systemd/system/node_exporter.service; enabled; vendor preset: enabled)
+                    Active: active (running) since Fri 2021-12-03 17:35:31 UTC; 2s ago
+                  Main PID: 15901 (node_exporter)
+                     Tasks: 4 (limit: 1071)
+                    Memory: 1.8M
+                    CGroup: /system.slice/node_exporter.service
+                            └─15901 /usr/local/bin/node_exporter --web.listen-address=:9100
+
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.761Z caller=node_exporter.go:112 collector=thermal_zone
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:112 collector=time
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:112 collector=timex
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:112 collector=udp_queues
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:112 collector=uname
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:112 collector=vmstat
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:112 collector=xfs
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:112 collector=zfs
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=node_exporter.go:191 msg="Listening on" address=:9100
+               Dec 03 17:35:31 vagrant node_exporter[15901]: level=info ts=2021-12-03T17:35:31.762Z caller=tls_config.go:170 msg="TLS is disabled and it cannot be enabled on the fly." http2=false
+               vagrant@vagrant:~$ sudo cat /etc/default/node_exporter
+               #
+               NE_OPT="--web.listen-address=":9100""
+
+               vagrant@vagrant:~$ sudo cat  /etc/systemd/system/node_exporter.service
+               [Unit]
+               Description=Prometheus Node Exporter
+               Wants=network-online.target
+               After=network-online.target
+
+               [Service]
+               User=node_exporter
+               Group=node_exporter
+               Type=simple
+               EnvironmentFile=/etc/default/node_exporter
+               ExecStart=/usr/local/bin/node_exporter $NE_OPT
+
+               [Install]
+               WantedBy=multi-user.target
+    
     * удостоверьтесь, что с помощью systemctl процесс корректно стартует, завершается, а после перезагрузки автоматически поднимается.
 
                   vagrant@vagrant:/tmp/node_exporter-1.0.1.linux-amd64$ sudo systemctl daemon-reload
