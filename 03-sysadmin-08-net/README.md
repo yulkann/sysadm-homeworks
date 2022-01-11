@@ -23,6 +23,21 @@ show bgp x.x.x.x/32
         N*   5.166.200.0/22   162.251.163.2                          0 53767 174 174 1299 9049 9049 9049 42682 i
 
 2. Создайте dummy0 интерфейс в Ubuntu. Добавьте несколько статических маршрутов. Проверьте таблицу маршрутизации.
+            
+            3: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+                  link/ether 26:3b:42:76:dc:92 brd ff:ff:ff:ff:ff:ff
+                  inet 10.2.2.2/32 brd 10.2.2.2 scope global dummy0
+                     valid_lft forever preferred_lft forever
+                  inet6 fe80::243b:42ff:fe76:dc92/64 scope link
+                     valid_lft forever preferred_lft forever
+             
+              vagrant@vagrant:~$ sudo  ip route
+              default via 10.0.2.2 dev eth0 proto dhcp src 10.0.2.15 metric 100
+              10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15
+              10.0.2.2 dev eth0 proto dhcp scope link src 10.0.2.15 metric 100
+              10.2.2.2 dev dummy0 scope link
+              192.168.1.0/24 dev dummy0 proto kernel scope link src 192.168.1.150
+                     
 
 3. Проверьте открытые TCP порты в Ubuntu, какие протоколы и приложения используют эти порты? Приведите несколько примеров.
 
@@ -46,7 +61,8 @@ show bgp x.x.x.x/32
 
 5. Используя diagrams.net, создайте L3 диаграмму вашей домашней сети или любой другой сети, с которой вы работали. 
 
-              ![изображение](https://user-images.githubusercontent.com/91043924/149023020-982f7417-6bcb-4511-a703-ee9c92cef167.png)
+ ![изображение](https://user-images.githubusercontent.com/91043924/149023201-8ce6dcc5-f3b3-48e1-87e2-10414223ac61.png)
+
 
  ---
 ## Задание для самостоятельной отработки (необязательно к выполнению)
