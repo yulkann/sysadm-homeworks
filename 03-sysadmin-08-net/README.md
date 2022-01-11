@@ -26,9 +26,27 @@ show bgp x.x.x.x/32
 
 3. Проверьте открытые TCP порты в Ubuntu, какие протоколы и приложения используют эти порты? Приведите несколько примеров.
 
+              vagrant@vagrant:~$ sudo lsof -nP -iTCP -sTCP:LISTEN
+              COMMAND   PID            USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+              systemd     1            root   35u  IPv4    833      0t0  TCP *:111 (LISTEN)
+              systemd     1            root   37u  IPv6    837      0t0  TCP *:111 (LISTEN)
+              rpcbind   608            _rpc    4u  IPv4    833      0t0  TCP *:111 (LISTEN)
+              rpcbind   608            _rpc    6u  IPv6    837      0t0  TCP *:111 (LISTEN)
+              systemd-r 609 systemd-resolve   13u  IPv4  20824      0t0  TCP 127.0.0.53:53 (LISTEN)
+              sshd      898            root    3u  IPv4  24977      0t0  TCP *:22 (LISTEN)
+              sshd      898            root    4u  IPv6  24979      0t0  TCP *:22 (LISTEN)
+
 4. Проверьте используемые UDP сокеты в Ubuntu, какие протоколы и приложения используют эти порты?
 
+              vagrant@vagrant:~$ ss -pl | grep udp
+              udp     UNCONN   0        0                                       127.0.0.53%lo:domain                      0.0.0.0:*
+              udp     UNCONN   0        0                                      10.0.2.15%eth0:bootpc                      0.0.0.0:*
+              udp     UNCONN   0        0                                             0.0.0.0:sunrpc                      0.0.0.0:*
+              udp     UNCONN   0        0                                                [::]:sunrpc                         [::]:*
+
 5. Используя diagrams.net, создайте L3 диаграмму вашей домашней сети или любой другой сети, с которой вы работали. 
+
+              ![изображение](https://user-images.githubusercontent.com/91043924/149023020-982f7417-6bcb-4511-a703-ee9c92cef167.png)
 
  ---
 ## Задание для самостоятельной отработки (необязательно к выполнению)
