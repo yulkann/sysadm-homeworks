@@ -24,9 +24,9 @@ e=$(($a+$b))
 
 | Переменная  | Значение | Обоснование |
 | ------------- | ------------- | ------------- |
-| `c`  | ???  | ??? |
-| `d`  | ???  | ??? |
-| `e`  | ???  | ??? |
+| `c`  | a+b  | не переменные |
+| `d`  | 1+2  | вывела строки  |
+| `e`  | 3  | прошло арифметическое действие |
 
 
 ## Обязательная задача 2
@@ -44,7 +44,17 @@ done
 
 ### Ваш скрипт:
 ```bash
-???
+while ((1==1))
+do
+	curl https://localhost:4757
+	if (($? != 0))
+	then
+		date >> curl.log
+	else 
+		break
+	fi
+	sleep 30
+done
 ```
 
 ## Обязательная задача 3
@@ -52,7 +62,24 @@ done
 
 ### Ваш скрипт:
 ```bash
-???
+ #!/usr/bin/env bash
+ip=(192.168.0.1 173.194.222.113 87.250.250.242)
+for i in ${ip[@]}
+do
+x=0
+while ((x!=5))
+    do
+    curl -I --connect-time 2 http://$i:80>/dev/null
+       if (($?==0))
+          then
+          let "x+=1"
+          echo `date` " IP "$i" 80 Port  Avalible" >> log
+          else
+          echo `date` " IP "$i" 80 Port Not Avalible" >> log
+          let "x+=1"
+       fi
+    done
+done
 ```
 
 ## Обязательная задача 4
@@ -60,7 +87,23 @@ done
 
 ### Ваш скрипт:
 ```bash
-???
+#!/usr/bin/env bash
+ip=(192.168.0.1 173.194.222.113 87.250.250.242)
+while ((1==1))
+do
+for i in ${ip[@]}
+ do
+ curl -I --connect-time 2 http://$i:80>/dev/null
+       if (($?==0))
+	  then
+	  echo `date` " IP "$i" 80 Port Avalible" >> log 
+	 else
+	 echo `date` " IP "$i" 80 Port Not Avalible" >> error
+	 break 
+       fi
+     sleep 15
+ done
+done
 ```
 
 ## Дополнительное задание (со звездочкой*) - необязательно к выполнению
